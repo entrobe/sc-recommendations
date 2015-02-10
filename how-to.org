@@ -1,0 +1,11 @@
+* Setting up
+** maven
+*** bring in apache-mahout 0.9 in pom.xml deps
+** create data dir
+*** grouplens.org to get the movielens data
+**** 100k
+**** move u.data into data dir
+** simple logging facade slf4j
+*** version 1.7.5
+** guava libraries using
+*** version 3.2
