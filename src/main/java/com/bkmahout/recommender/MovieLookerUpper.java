@@ -24,7 +24,7 @@ public class MovieLookerUpper {
         }
     }
 
-    public String getTitleFromId(long itemId) throws IOException {
+    public String GetTitleFromId(long itemId) throws IOException {
         return Movies.stream()
                 .filter(movieInfo -> Long.parseLong(movieInfo[0]) == itemId)
                 .map(foundTitle -> foundTitle[1])

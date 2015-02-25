@@ -1,16 +1,11 @@
 package com.bkmahout.recommender;
 
 import org.apache.mahout.cf.taste.common.TasteException;
-import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
-import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
-import org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
-import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,9 +34,9 @@ public class Recommender {
 
     public static void printItemRecommendations(List<ItemRecommendation> recommendations, MovieLookerUpper titleFinder) throws IOException {
         for(ItemRecommendation recommendedItemList : recommendations) {
-            String title = titleFinder.getTitleFromId(recommendedItemList.ItemId);
+            String title = titleFinder.GetTitleFromId(recommendedItemList.ItemId);
             for(RecommendedItem recommendedItem : recommendedItemList.Recommendation) {
-                String recommendedTitle = titleFinder.getTitleFromId(recommendedItem.getItemID());
+                String recommendedTitle = titleFinder.GetTitleFromId(recommendedItem.getItemID());
                 System.out.println(title + "," + recommendedTitle + "," + recommendedItem.getValue());
             }
         }
