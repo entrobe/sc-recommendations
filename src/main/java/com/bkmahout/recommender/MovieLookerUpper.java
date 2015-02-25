@@ -3,20 +3,32 @@ package com.bkmahout.recommender;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovieLookerUpper {
-    private static String filePath = "data/movie-information.csv";
+    private String FilePath;
+    private List<String[]> Movies;
 
-    public static String getTitleFromId(long itemId) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
+    public MovieLookerUpper(String filePath){
+        FilePath = filePath;
+        Movies = new ArrayList<>();
+    }
+
+    public void CreateMovieList() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(FilePath));
         String line;
-        String movieTitle = "Title not found";
         while((line = br.readLine()) != null) {
             String[] values = line.split(",", -1);
-            if(Long.parseLong(values[0]) == itemId) {
-                movieTitle = values[1];
-            }
+            Movies.add(values);
         }
-        return movieTitle;
+    }
+
+    public String getTitleFromId(long itemId) throws IOException {
+        return Movies.stream()
+                .filter(movieInfo -> Long.parseLong(movieInfo[0]) == itemId)
+                .map(foundTitle -> foundTitle[1])
+                .findFirst()
+                .orElse("Title Not Found");
     }
 }

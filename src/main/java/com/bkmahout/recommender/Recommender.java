@@ -20,20 +20,14 @@ public class Recommender {
     public static void main(String[] args){
         try {
             DataModel dm = new FileDataModel(new File("data/movies.csv"));
+            MovieLookerUpper titleFinder = new MovieLookerUpper("data/movie-information.csv");
+            titleFinder.CreateMovieList();
 
-            ItemSimilarity sim = new LogLikelihoodSimilarity(dm);
+            System.out.println("======Item Recommendations=====");
 
-            GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(dm, sim);
+            List<ItemRecommendation> recommendations = ItemRecommender.GetRecommendations(dm);
 
-            List<ItemRecommendation> recommendations = getRecommendations(dm, recommender);
-
-            for(ItemRecommendation recommendedItemList : recommendations) {
-                String title = MovieLookerUpper.getTitleFromId(recommendedItemList.ItemId);
-                for(RecommendedItem recommendedItem : recommendedItemList.Recommendation) {
-                    String recommendedTitle = MovieLookerUpper.getTitleFromId(recommendedItem.getItemID());
-                    System.out.println(title + "," + recommendedTitle + "," + recommendedItem.getValue());
-                }
-            }
+            printItemRecommendations(recommendations, titleFinder);
         } catch (IOException e) {
             System.out.println("Oops!");
             e.printStackTrace();
@@ -43,19 +37,14 @@ public class Recommender {
         }
     }
 
-    public static List<ItemRecommendation> getRecommendations(DataModel dm, GenericItemBasedRecommender recommender) throws TasteException {
-        int x = 1;
-
-        List<ItemRecommendation> recommendations = new ArrayList<>();
-        for(LongPrimitiveIterator items = dm.getItemIDs(); items.hasNext();){
-            long itemId = items.nextLong();
-
-            recommendations.add(new ItemRecommendation(itemId, recommender.mostSimilarItems(itemId, 5)));
-
-            x++;
-            if(x>10) break;
+    public static void printItemRecommendations(List<ItemRecommendation> recommendations, MovieLookerUpper titleFinder) throws IOException {
+        for(ItemRecommendation recommendedItemList : recommendations) {
+            String title = titleFinder.getTitleFromId(recommendedItemList.ItemId);
+            for(RecommendedItem recommendedItem : recommendedItemList.Recommendation) {
+                String recommendedTitle = titleFinder.getTitleFromId(recommendedItem.getItemID());
+                System.out.println(title + "," + recommendedTitle + "," + recommendedItem.getValue());
+            }
         }
-        return recommendations;
     }
 }
 
