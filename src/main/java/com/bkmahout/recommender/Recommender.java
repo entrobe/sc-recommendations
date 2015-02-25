@@ -9,8 +9,7 @@ import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +28,10 @@ public class Recommender {
             List<ItemRecommendation> recommendations = getRecommendations(dm, recommender);
 
             for(ItemRecommendation recommendedItemList : recommendations) {
+                String title = MovieLookerUpper.getTitleFromId(recommendedItemList.ItemId);
                 for(RecommendedItem recommendedItem : recommendedItemList.Recommendation) {
-                    System.out.println(recommendedItemList.ItemId + "," + recommendedItem.getItemID() + "," + recommendedItem.getValue());
+                    String recommendedTitle = MovieLookerUpper.getTitleFromId(recommendedItem.getItemID());
+                    System.out.println(title + "," + recommendedTitle + "," + recommendedItem.getValue());
                 }
             }
         } catch (IOException e) {
@@ -55,6 +56,23 @@ public class Recommender {
             if(x>10) break;
         }
         return recommendations;
+    }
+}
+
+class MovieLookerUpper {
+    private static String filePath = "data/movie-information.csv";
+
+    public static String getTitleFromId(long itemId) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        String line;
+        String movieTitle = "Title not found";
+        while((line = br.readLine()) != null) {
+            String[] values = line.split(",", -1);
+            if(Long.parseLong(values[0]) == itemId) {
+                movieTitle = values[1];
+            }
+        }
+        return movieTitle;
     }
 }
 
