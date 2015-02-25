@@ -11,6 +11,7 @@ import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,16 +26,12 @@ public class Recommender {
 
             GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(dm, sim);
 
-            int x = 1;
-            for(LongPrimitiveIterator items = dm.getItemIDs(); items.hasNext();){
-                long itemId = items.nextLong();
-                List<RecommendedItem> recommendations = recommender.mostSimilarItems(itemId, 5);
+            List<ItemRecommendation> recommendations = getRecommendations(dm, recommender);
 
-                for(RecommendedItem recommendation : recommendations) {
-                    System.out.println(itemId + "," + recommendation.getItemID() + "," + recommendation.getValue());
+            for(ItemRecommendation recommendedItemList : recommendations) {
+                for(RecommendedItem recommendedItem : recommendedItemList.Recommendation) {
+                    System.out.println(recommendedItemList.ItemId + "," + recommendedItem.getItemID() + "," + recommendedItem.getValue());
                 }
-                x++;
-                if(x>10) System.exit(1);
             }
         } catch (IOException e) {
             System.out.println("Oops!");
@@ -44,4 +41,20 @@ public class Recommender {
             e.printStackTrace();
         }
     }
+
+    public static List<ItemRecommendation> getRecommendations(DataModel dm, GenericItemBasedRecommender recommender) throws TasteException {
+        int x = 1;
+
+        List<ItemRecommendation> recommendations = new ArrayList<>();
+        for(LongPrimitiveIterator items = dm.getItemIDs(); items.hasNext();){
+            long itemId = items.nextLong();
+
+            recommendations.add(new ItemRecommendation(itemId, recommender.mostSimilarItems(itemId, 5)));
+
+            x++;
+            if(x>10) break;
+        }
+        return recommendations;
+    }
 }
+
