@@ -11,7 +11,7 @@
 *** guava libraries using
 **** version 3.2
 ** Implementing algos
-*** TODO Map Ids to names
+*** DONE <2015-02-26 Thu 11:47> Map Ids to names
 * Mahout notes
 ** Collaborative Filtering w/ Apache Mahout ([[http://ssc.io/wp-content/uploads/2013/02/cf-mahout.pdf][The Paper]])
 *** Preference Data
