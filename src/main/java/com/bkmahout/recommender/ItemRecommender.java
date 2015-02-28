@@ -10,9 +10,6 @@ import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by btk on 2/25/15.
- */
 public class ItemRecommender {
     public static List<ItemRecommendation> GetRecommendations(DataModel dm) throws TasteException {
         ItemSimilarity sim = new LogLikelihoodSimilarity(dm);
