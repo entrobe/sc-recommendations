@@ -7,6 +7,7 @@ import org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,5 +28,24 @@ public class ItemRecommender {
             if(x>10) break;
         }
         return recommendations;
+    }
+
+    public static void printItemRecommendations(List<ItemRecommendation> recommendations, MovieLookerUpper titleFinder) throws IOException {
+        recommendations.forEach(recommendation -> {
+            try {
+                String title = titleFinder.GetTitleFromId(recommendation.ItemId);
+                recommendation.Recommendation.forEach(item -> {
+                    try {
+                        String recommendedTitle = titleFinder.GetTitleFromId(item.getItemID());
+                        System.out.println(title + "," + recommendedTitle + "," + item.getValue());
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
