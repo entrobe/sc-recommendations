@@ -10,6 +10,7 @@ import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.UserBasedRecommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,5 +26,15 @@ public class UserRecommender {
             UserBasedRecommender recommender = new GenericUserBasedRecommender(dm, neighborhood, similarity);
 
             return recommender.recommend(100, 5);
+    }
+
+    public static void printUserRecommendations(MovieLookerUpper titleFinder, List<RecommendedItem> userRecommendations) {
+        userRecommendations.forEach(rec -> {
+            try {
+                System.out.println(titleFinder.GetTitleFromId(rec.getItemID()) + "," + rec.getValue());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
